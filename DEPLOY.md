@@ -2,6 +2,10 @@
 
 Checklist de publicação em produção. Execute na ordem.
 
+> **Sem orçamento?** Use [DEPLOY-ORACLE.md](DEPLOY-ORACLE.md): VPS gratuita da
+> Oracle Cloud + DuckDNS + Let's Encrypt, com endereço fixo e HTTPS. Este guia
+> aqui serve para qualquer servidor (inclusive pago).
+
 > **Antes de começar:** nunca use a API de produção do Asaas em ambiente
 > local. O `.env` de desenvolvimento deve apontar para
 > `https://api-sandbox.asaas.com/v3`. O arquivo de produção é

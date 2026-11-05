@@ -189,8 +189,14 @@ npm run preview
 
 ## Deploy
 
-O passo a passo completo está em [DEPLOY.md](DEPLOY.md), incluindo banco, proxy
-reverso, webhook do Asaas, backup e teste real de ponta a ponta.
+- [DEPLOY.md](DEPLOY.md) — checklist geral de publicação (banco, proxy reverso,
+  webhook do Asaas, backup e teste real de ponta a ponta).
+- [DEPLOY-ORACLE.md](DEPLOY-ORACLE.md) — passo a passo **sem custo mensal** com
+  Oracle Cloud Always Free + DuckDNS + Let's Encrypt. É o caminho que substitui o
+  túnel `trycloudflare` por um endereço fixo com HTTPS.
+
+Os arquivos de apoio estão em `deploy/` (`nginx-agendatech.conf`,
+`ecosystem.config.cjs` e `duckdns-update.sh`).
 
 ## Segurança
 
