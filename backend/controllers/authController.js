@@ -89,6 +89,7 @@ async function cadastrar(req, res) {
     const {
         empresa,
         admin,
+        aceite,
     } = req.body || {};
 
     // =====================================================
@@ -158,6 +159,26 @@ async function cadastrar(req, res) {
         limparTexto(
             empresa.email
         ).toLowerCase();
+
+    // =====================================================
+    // ACEITE DOS DOCUMENTOS LEGAIS
+    // =====================================================
+
+    if (
+        !aceite ||
+        typeof aceite !== "object" ||
+        aceite.termos !== true ||
+        typeof aceite.versao !== "string" ||
+        !aceite.versao.trim()
+    ) {
+        return res.status(400).json({
+            mensagem:
+                "É necessário aceitar os Termos de Uso e a Política de Privacidade para criar a conta.",
+        });
+    }
+
+    const versaoAceite =
+        aceite.versao.trim().slice(0, 20);
 
     // =====================================================
     // VALIDAR EMPRESA / ADMIN
@@ -396,6 +417,36 @@ async function cadastrar(req, res) {
                 emailAdmin,
                 senhaHash,
                 role,
+            ]
+        );
+
+        // =================================================
+        // REGISTRAR ACEITE DOS DOCUMENTOS LEGAIS
+        // =================================================
+
+        await conexao.query(
+            `
+                INSERT INTO aceites_legais
+                    (
+                        empresa_id,
+                        usuario_id,
+                        documento,
+                        versao,
+                        ip,
+                        user_agent
+                    )
+                VALUES (?, ?, ?, ?, ?, ?)
+            `,
+            [
+                empresa_id,
+                usuarioCriado.insertId,
+                "TERMOS_E_PRIVACIDADE",
+                versaoAceite,
+                String(req.ip || "").slice(0, 45) ||
+                    null,
+                String(
+                    req.get("user-agent") || ""
+                ).slice(0, 255) || null,
             ]
         );
 

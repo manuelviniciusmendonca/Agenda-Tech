@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   User,
 } from "lucide-react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import api from "../services/api";
 
 function obterDataHojeLocal() {
@@ -629,7 +629,13 @@ export default function PublicAgendamento() {
 
         <footer className="bk-footer">
           <img src="/logo.png" alt="Agenda Tech" className="bk-footer-logo" />
-          <span>Agendamento via <strong>Agenda Tech</strong></span>
+
+          <span>
+            Agendamento via <strong>Agenda Tech</strong> ·{" "}
+            <Link to="/privacidade" className="bk-footer-legal">
+              Privacidade
+            </Link>
+          </span>
         </footer>
       </div>
     </div>

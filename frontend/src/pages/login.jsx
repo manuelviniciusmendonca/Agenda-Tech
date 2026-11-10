@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 
 function Login() {
@@ -186,9 +186,15 @@ function Login() {
         </div>
       </div>
 
-      <div className="login-bottom">
+      <div className="login-bottom login-bottom-legal">
         <span>© 2026 Agenda Tech</span>
-        <span>Gestão inteligente para negócios de atendimento.</span>
+
+        <nav className="login-legal-links" aria-label="Documentos legais">
+          <Link to="/termos">Termos de Uso</Link>
+          <Link to="/privacidade">Privacidade</Link>
+          <Link to="/cookies">Cookies</Link>
+          <Link to="/cancelamento">Cancelamento</Link>
+        </nav>
       </div>
     </div>
   );

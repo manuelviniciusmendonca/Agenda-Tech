@@ -38,6 +38,11 @@ import PublicAgendamento from "./pages/PublicAgendamento";
 import PublicAgendamentoConfirmado from "./pages/PublicAgendamentoConfirmado";
 import PublicAgendamentoGerenciar from "./pages/PublicAgendamentoGerenciar";
 
+import Termos from "./pages/Termos";
+import Privacidade from "./pages/Privacidade";
+import Cookies from "./pages/Cookies";
+import Cancelamento from "./pages/Cancelamento";
+
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
@@ -72,6 +77,30 @@ function App() {
                 <Route
                     path="/convite/:token"
                     element={<AceitarConvite />}
+                />
+
+                {/* =====================================================
+                    DOCUMENTOS LEGAIS (PÚBLICOS)
+                ====================================================== */}
+
+                <Route
+                    path="/termos"
+                    element={<Termos />}
+                />
+
+                <Route
+                    path="/privacidade"
+                    element={<Privacidade />}
+                />
+
+                <Route
+                    path="/cookies"
+                    element={<Cookies />}
+                />
+
+                <Route
+                    path="/cancelamento"
+                    element={<Cancelamento />}
                 />
 
                 {/* AGENDAMENTO PÚBLICO */}

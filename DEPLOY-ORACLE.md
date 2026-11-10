@@ -247,6 +247,7 @@ mysql -u agendatech -p -e "SHOW TABLES;" agendatech
 > ```bash
 > mysql -u agendatech -p agendatech < backend/migrations/001_horarios_profissionais.sql
 > mysql -u agendatech -p agendatech < backend/migrations/002_assinaturas_status_default_pendente.sql
+> mysql -u agendatech -p agendatech < backend/migrations/003_aceites_legais.sql
 > ```
 
 ---
@@ -322,7 +323,23 @@ chmod 600 .env
 
 ---
 
-## Passo 8 — Build do painel
+## Passo 8 — Preencher os dados legais e buildar o painel
+
+### 8.1. Dados da empresa nos documentos legais
+
+Antes do build, edite **dois** arquivos e substitua tudo que começa com
+`PREENCHER`:
+
+```bash
+nano /var/www/agendatech/frontend/src/legal/dadosEmpresa.js
+nano /var/www/agendatech/landing-page/src/legal.js
+```
+
+São razão social, CNPJ, endereço, cidade/UF e os e-mails de contato, suporte e
+encarregado de dados (DPO). Enquanto houver campo pendente, as páginas legais
+exibem um aviso de revisão. Esses dados são **gravados no build** do frontend.
+
+### 8.2. Build
 
 ```bash
 cd /var/www/agendatech/frontend

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { VERSAO_LEGAL } from "../legal/dadosEmpresa";
 
 function Cadastro() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function Cadastro() {
   });
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
+  const [aceite, setAceite] = useState(false);
 
   if (autenticado) {
     return (
@@ -69,6 +71,13 @@ function Cadastro() {
       return;
     }
 
+    if (!aceite) {
+      setErro(
+        "Para criar a conta é necessário aceitar os Termos de Uso e a Política de Privacidade.",
+      );
+      return;
+    }
+
     try {
       setCarregando(true);
       await cadastro({
@@ -82,6 +91,11 @@ function Cadastro() {
           nome: admin.nome.trim(),
           email: admin.email.trim(),
           senha: admin.senha,
+        },
+        aceite: {
+          termos: true,
+          privacidade: true,
+          versao: VERSAO_LEGAL,
         },
       });
 
@@ -231,6 +245,32 @@ function Cadastro() {
               </div>
             </fieldset>
 
+            <label className="signup-legal">
+              <input
+                type="checkbox"
+                checked={aceite}
+                onChange={(event) => setAceite(event.target.checked)}
+                required
+              />
+
+              <span>
+                Declaro que li e aceito os{" "}
+                <Link to="/termos" target="_blank" rel="noreferrer">
+                  Termos de Uso
+                </Link>
+                , a{" "}
+                <Link to="/privacidade" target="_blank" rel="noreferrer">
+                  Política de Privacidade
+                </Link>{" "}
+                e a{" "}
+                <Link to="/cookies" target="_blank" rel="noreferrer">
+                  Política de Cookies
+                </Link>
+                . Declaro também que sou maior de 18 anos e que tenho poderes
+                para representar a empresa cadastrada.
+              </span>
+            </label>
+
             {erro && (
               <div className="login-error" role="alert">
                 {erro}
@@ -255,9 +295,15 @@ function Cadastro() {
         </section>
       </main>
 
-      <div className="login-bottom">
+      <div className="login-bottom login-bottom-legal">
         <span>© 2026 Agenda Tech</span>
-        <span>Gestão inteligente para negócios de atendimento.</span>
+
+        <nav className="login-legal-links" aria-label="Documentos legais">
+          <Link to="/termos">Termos de Uso</Link>
+          <Link to="/privacidade">Privacidade</Link>
+          <Link to="/cookies">Cookies</Link>
+          <Link to="/cancelamento">Cancelamento</Link>
+        </nav>
       </div>
     </div>
   );

@@ -66,6 +66,7 @@ ordem, a partir de `backend/migrations/`:
 ```
 001_horarios_profissionais.sql
 002_assinaturas_status_default_pendente.sql
+003_aceites_legais.sql
 ```
 
 > O dump com o schema completo não é versionado porque pode conter dados de
@@ -157,6 +158,28 @@ O modelo completo está em `backend/.env.example` (desenvolvimento) e
 6. Assinaturas vencidas ou não pagas recebem `403` com o código
    `ASSINATURA_VENCIDA` ou `ASSINATURA_BLOQUEADA` e são levadas para
    `/assinatura`.
+
+## Documentos legais
+
+O pacote legal fica em `frontend/src/legal/` e é publicado pelo próprio painel:
+
+| Rota | Documento |
+|---|---|
+| `/termos` | Termos de Uso |
+| `/privacidade` | Política de Privacidade (LGPD) |
+| `/cookies` | Política de Cookies |
+| `/cancelamento` | Cancelamento e Reembolso |
+
+- O cadastro exige aceite explícito dos Termos e da Política de Privacidade.
+- Cada aceite é registrado na tabela `aceites_legais` com versão, data/hora, IP
+  e navegador (migration `003_aceites_legais.sql`).
+- Os dados da empresa (razão social, CNPJ, endereço, e-mails e DPO) ficam em
+  `frontend/src/legal/dadosEmpresa.js` e `landing-page/src/legal.js`. Enquanto
+  houver campo `PREENCHER`, as páginas mostram um aviso de revisão.
+- A landing page e as telas de login/cadastro apontam para essas rotas.
+
+> Os textos são um ponto de partida técnico e devem ser revisados por um
+> advogado antes da operação comercial definitiva.
 
 ## Scripts
 

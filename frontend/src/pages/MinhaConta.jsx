@@ -1,5 +1,7 @@
-import { Building2, Mail, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Building2, FileText, Mail, ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { DOCUMENTOS_LEGAIS, VERSAO_LEGAL } from "../legal/dadosEmpresa";
 
 function nomeDoCargo(role) {
   if (role === "ADMIN") return "Administrador";
@@ -61,6 +63,37 @@ function MinhaConta() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="account-legal" aria-label="Documentos legais">
+        <header className="account-legal-header">
+          <div className="account-legal-icon">
+            <FileText size={18} />
+          </div>
+
+          <div>
+            <h2>Documentos legais</h2>
+            <p>
+              Termos e políticas que regem o uso do Agenda Tech. Versão{" "}
+              {VERSAO_LEGAL}.
+            </p>
+          </div>
+        </header>
+
+        <ul className="account-legal-links">
+          {DOCUMENTOS_LEGAIS.map((documento) => (
+            <li key={documento.chave}>
+              <Link to={documento.caminho}>
+                <span>
+                  <strong>{documento.titulo}</strong>
+                  <small>{documento.descricao}</small>
+                </span>
+
+                <ArrowUpRight size={16} />
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   );

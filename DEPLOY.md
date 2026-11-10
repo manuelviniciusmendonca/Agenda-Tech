@@ -40,6 +40,7 @@ Checklist de publicação em produção. Execute na ordem.
    ```
    backend/migrations/001_horarios_profissionais.sql
    backend/migrations/002_assinaturas_status_default_pendente.sql
+   backend/migrations/003_aceites_legais.sql
    ```
 
 4. Confirme o default:

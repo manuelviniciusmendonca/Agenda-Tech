@@ -18,6 +18,8 @@ import {
 
 import "./App.css";
 
+import { DADOS_EMPRESA } from "./legal";
+
 const appBaseUrl = (
   import.meta.env.VITE_APP_URL ||
   (import.meta.env.DEV
@@ -26,6 +28,7 @@ const appBaseUrl = (
 ).replace(/\/+$/, "");
 const loginUrl = `${appBaseUrl}/login`;
 const cadastroUrl = `${appBaseUrl}/cadastro`;
+const ANO_ATUAL = new Date().getFullYear();
 
 const steps = [
   {
@@ -1464,12 +1467,30 @@ function App() {
               <a href="#faq">FAQ</a>
               <a href="#preco">Começar agora</a>
             </div>
+
+            <div className="footer-column">
+              <span>Legal</span>
+              <a href={`${appBaseUrl}/termos`}>Termos de Uso</a>
+              <a href={`${appBaseUrl}/privacidade`}>
+                Política de Privacidade
+              </a>
+              <a href={`${appBaseUrl}/cookies`}>Política de Cookies</a>
+              <a href={`${appBaseUrl}/cancelamento`}>
+                Cancelamento e Reembolso
+              </a>
+            </div>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 Agenda Tech. Todos os direitos reservados.</span>
-          <span>Feito para quem vive de atendimento.</span>
+          <span>
+            © {ANO_ATUAL} Agenda Tech. Todos os direitos
+            reservados.
+          </span>
+          <span>
+            {DADOS_EMPRESA.razaoSocial} · CNPJ {DADOS_EMPRESA.cnpj} ·{" "}
+            {DADOS_EMPRESA.emailContato}
+          </span>
         </div>
       </footer>
     </div>
