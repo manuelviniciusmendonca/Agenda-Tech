@@ -187,49 +187,6 @@ a {
   background: rgba(0, 0, 0, 0.55);
 }
 
-@media (max-width: 768px) {
-  /* Esconde sidebar por padrÃ£o em mobile; ela desliza pelo overlay */
-  .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.25s ease;
-  }
-
-  .sidebar.sidebar-open {
-    transform: translateX(0);
-  }
-
-  .sidebar-mobile-toggle {
-    display: flex;
-  }
-
-  .sidebar-overlay {
-    display: block;
-  }
-
-  /* O conteÃºdo principal ocupa tela toda em mobile */
-  .main-content {
-    margin-left: 0;
-  }
-
-  /* Empurra o topbar para nÃ£o sobrepor o botÃ£o hamburguer */
-  .topbar {
-    padding-left: 72px;
-  }
-
-  /* Grids de mÃ©tricas empilham em telas pequenas */
-  .dashboard-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .services-grid,
-  .professionals-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .page-content {
-    padding: 20px 16px;
-  }
-}
 
 /* =========================================================
    MAIN
@@ -11412,5 +11369,646 @@ a {
     align-items: flex-start;
     margin-top: 8px;
     padding: 0 24px 24px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — LAYOUT DO APP (mobile)
+   Este bloco precisa ficar no fim do arquivo para vencer
+   as regras base (.main-content, .topbar, .page-content).
+========================================================= */
+
+@media (max-width: 768px) {
+  /* Sidebar vira drawer deslizante */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-mobile-toggle {
+    display: flex;
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  /* Conteúdo ocupa a tela inteira (sem a margem da sidebar) */
+  .app-layout {
+    overflow-x: hidden;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Espaço à esquerda para o botão hamburguer */
+  .topbar {
+    height: 72px;
+    padding: 0 16px 0 72px;
+    gap: 12px;
+  }
+
+  .topbar-search {
+    width: auto;
+    flex: 1 1 120px;
+    min-width: 0;
+  }
+
+  .topbar-search input {
+    min-width: 0;
+  }
+
+  .topbar-right {
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .page-content {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+
+  /* Grids empilham em telas pequenas */
+  .dashboard-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .services-grid,
+  .professionals-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    padding-right: 12px;
+    gap: 8px;
+  }
+
+  .topbar-search {
+    flex: 1 1 80px;
+  }
+
+  .topbar-right {
+    gap: 8px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — AJUSTES POR TELA (mobile)
+========================================================= */
+
+@media (max-width: 768px) {
+  /* Filtros de recuperação: quebram linha em vez de rolar */
+  .recovery-filters {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding: 0 15px 13px;
+  }
+
+  .recovery-filters button {
+    flex: 0 0 auto;
+    min-height: 34px;
+  }
+
+  /* Página de agendamento: evita que o card force largura */
+  .pa-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pa-card,
+  .pa-card-header,
+  .pa-card-header > div,
+  .pa-link-group,
+  .pa-link-row {
+    min-width: 0;
+  }
+
+  .pa-card-title,
+  .pa-card-desc {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — ÁREA DO PROFISSIONAL
+========================================================= */
+
+@media (max-width: 768px) {
+  .professional-home-summary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .professional-home-card {
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .professional-home-card > div {
+    min-width: 0;
+  }
+
+  .professional-home-card > div > strong {
+    font-size: 20px;
+    overflow-wrap: anywhere;
+  }
+
+  .professional-home-appointments {
+    padding: 20px 16px;
+  }
+
+  .professional-clients-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .professional-client-card {
+    min-width: 0;
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .professional-client-card > h2,
+  .professional-client-card > a {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — PÁGINAS LEGAIS
+========================================================= */
+
+@media (max-width: 900px) {
+  .legal-container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .legal-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .legal-table-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .legal-body table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .legal-body th,
+  .legal-body td {
+    padding: 8px 6px;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .legal-body th {
+    font-size: 9.5px;
+    letter-spacing: 0.2px;
+  }
+
+  .legal-body code {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — MODAIS
+========================================================= */
+
+@media (max-width: 768px) {
+  .professional-modal-backdrop {
+    padding: 16px;
+    place-items: start center;
+  }
+
+  .professional-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 20px 16px !important;
+    max-height: calc(100vh - 32px);
+  }
+
+  .professional-delete-body p,
+  .professional-delete-consequences li {
+    overflow-wrap: anywhere;
+  }
+
+  .logout-modal {
+    padding: 20px 18px;
+  }
+
+  .logout-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .logout-modal-actions button {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .agenda-modal-backdrop,
+  .clients-modal-backdrop,
+  .service-modal-backdrop {
+    padding: 12px;
+  }
+
+  .agenda-modal,
+  .clients-modal,
+  .service-modal {
+    padding: 20px 16px;
+    max-height: calc(100vh - 24px);
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — ÁREAS DE TOQUE E AJUSTES FINOS
+========================================================= */
+
+/* Modal de exclusão de conta: impede o input de forçar largura */
+.cfg-delete-account-form,
+.cfg-delete-account-form .professional-form-field,
+.cfg-delete-account-form input {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Busca da topbar com área de toque confortável */
+.topbar-search {
+  min-height: 40px;
+}
+
+.topbar-search input {
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  /* Campos de busca internos */
+  .clients-search,
+  .recovery-search {
+    min-height: 40px;
+  }
+
+  .clients-search input,
+  .recovery-search input {
+    height: 100%;
+  }
+
+  /* Botões de texto viram alvos de toque adequados */
+  .text-button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 4px;
+  }
+
+  .recovery-client-name {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 2px 0;
+  }
+
+  /* Select de profissional na página de horários */
+  .horarios-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .settings-field > span {
+    font-size: 12px;
+    font-weight: 700;
+    color: #444;
+  }
+
+  .settings-field select {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #111;
+    font: inherit;
+    font-size: 14px;
+  }
+
+  /* Links de navegação do agendamento público */
+  .manage-booking-back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
+
+  .manage-booking-detail a,
+  .account-email {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+
+  .login-legal-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+}
+
+/* Tela de login: controles com alvo de toque adequado */
+.forgot-password {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 2px;
+}
+
+.password-toggle {
+  right: 4px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.login-footer button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 4px;
+}
+
+.login-footer {
+  flex-wrap: wrap;
+  row-gap: 0;
+}
+
+/* =========================================================
+   RESPONSIVO — CORREÇÕES FINAIS DE TOQUE/MODAL
+========================================================= */
+
+/* Formulário do modal de exclusão não pode exceder o modal */
+.cfg-delete-account-form {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.professional-delete-body {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Input da busca da topbar ocupa a altura do wrapper */
+.topbar-search input {
+  height: 40px;
+}
+
+@media (max-width: 768px) {
+  .account-email a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — TABLET E ALVOS DE TOQUE
+========================================================= */
+
+/* Página de agendamento: a coluna lateral fixa só cabe em telas
+   realmente largas. Abaixo disso o card ocupa a linha inteira. */
+@media (max-width: 1100px) {
+  .pa-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pa-tips-card {
+    position: static;
+  }
+}
+
+/* Select de profissional (Horários) — estilo base em qualquer largura */
+.settings-field {
+  display: flex;
+  flex: 0 1 280px;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.settings-field > span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #444;
+}
+
+.settings-field select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  font-size: 13px;
+}
+
+.settings-field select:focus {
+  border-color: #d4a800;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 196, 0, 0.12);
+}
+
+.horarios-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* E-mail da conta com altura de toque confortável em qualquer tela */
+.account-email a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  overflow-wrap: anywhere;
+}
+
+/* Botões de texto ganham área mínima de toque */
+.text-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 2px;
+}
+
+@media (max-width: 768px) {
+  .horarios-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .settings-field {
+    flex: 1 1 auto;
+  }
+
+  .settings-field select {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  .account-email a,
+  .text-button {
+    min-height: 40px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — ALVOS DE TOQUE RESTANTES
+========================================================= */
+
+.horarios-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.horarios-secondary-button:hover:not(:disabled) {
+  border-color: #bbb;
+  background: #fafafa;
+}
+
+.horarios-secondary-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.logout-modal-actions button {
+  min-height: 42px;
+}
+
+@media (max-width: 1024px) {
+  .professional-home-section-heading > a,
+  .professional-client-card > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
+
+  .horarios-secondary-button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   RESPONSIVO — TABLET / CELULAR NA HORIZONTAL (769–1024px)
+   Nessa faixa o menu lateral fixo deixava o conteúdo
+   "recuado para a direita". Aqui ele vira drawer igual ao mobile.
+========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .app-layout {
+    overflow-x: hidden;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-mobile-toggle {
+    display: flex;
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .topbar {
+    height: 72px;
+    padding: 0 20px 0 72px;
+    gap: 12px;
+  }
+
+  .topbar-search {
+    width: auto;
+    flex: 1 1 160px;
+    min-width: 0;
+  }
+
+  .topbar-search input {
+    min-width: 0;
+  }
+
+  .topbar-right {
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  .page-content {
+    padding: 24px 20px;
+    max-width: 100%;
+  }
+
+  /* Aproveita a largura extra para 2 colunas confortáveis */
+  .dashboard-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .services-grid,
+  .professionals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
