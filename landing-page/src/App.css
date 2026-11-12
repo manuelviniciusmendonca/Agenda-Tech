@@ -487,6 +487,19 @@ input {
   font-size: 14px;
 }
 
+/* Sem o grid de duas colunas do hero, os cards flutuantes
+   precisam ficar dentro da viewport para não gerar rolagem lateral. */
+
+@media (max-width: 1000px) {
+  .floating-card-one {
+    left: 5px;
+  }
+
+  .floating-card-two {
+    right: 5px;
+  }
+}
+
 
 /* =========================================================
    COMO FUNCIONA
@@ -1064,11 +1077,25 @@ input {
   }
 
   .login-button {
-    display: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 40px;
+    padding: 0 6px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .nav-actions {
+    gap: 10px;
   }
 
   .nav-cta {
+    min-height: 34px;
     padding: 9px 12px;
+    font-size: 12px;
+    white-space: nowrap;
   }
 
   .hero {
@@ -1076,8 +1103,8 @@ input {
   }
 
   .hero h1 {
-    font-size: 49px;
-    letter-spacing: -3px;
+    font-size: clamp(40px, 13vw, 49px);
+    letter-spacing: -2.5px;
   }
 
   .hero-description {
@@ -2981,6 +3008,10 @@ section[id] {
     gap: 24px;
   }
 
+  .footer-column a {
+    padding: 5px 0;
+  }
+
   .footer-bottom {
     flex-direction: column;
     gap: 10px;
@@ -3539,4 +3570,33 @@ section[id] {
 
 .demo-panel-foot strong {
   color: #8a6d00;
+}
+
+/* =========================================================
+   RESPONSIVO — TELAS MUITO ESTREITAS
+========================================================= */
+
+@media (max-width: 380px) {
+  .logo-image {
+    height: 24px;
+  }
+
+  .nav-actions {
+    gap: 8px;
+  }
+
+  .login-button {
+    padding: 0 4px;
+    font-size: 11px;
+  }
+
+  .nav-cta {
+    padding: 8px 9px;
+    font-size: 11px;
+  }
+
+  .nav-cta svg {
+    width: 14px;
+    height: 14px;
+  }
 }

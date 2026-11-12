@@ -18,8 +18,6 @@ import {
 
 import "./App.css";
 
-import { DADOS_EMPRESA } from "./legal";
-
 const appBaseUrl = (
   import.meta.env.VITE_APP_URL ||
   (import.meta.env.DEV
@@ -1486,10 +1484,6 @@ function App() {
           <span>
             © {ANO_ATUAL} Agenda Tech. Todos os direitos
             reservados.
-          </span>
-          <span>
-            {DADOS_EMPRESA.razaoSocial} · CNPJ {DADOS_EMPRESA.cnpj} ·{" "}
-            {DADOS_EMPRESA.emailContato}
           </span>
         </div>
       </footer>
