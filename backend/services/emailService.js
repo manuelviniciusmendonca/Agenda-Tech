@@ -1,44 +1,31 @@
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 const { escaparHtml } = require("../utils/validation");
 
-// Configuração do transportador de e-mail
-let transporter = null;
+// Configuração do provedor de e-mail (Resend)
+const RESEND_API_URL = "https://api.resend.com/emails";
 
 async function inicializarEmailService() {
-    if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER) {
-        console.warn("Serviço de e-mail não configurado. Configure EMAIL_HOST e EMAIL_USER no .env");
-        return false;
-    }
-
-    transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: parseInt(process.env.EMAIL_PORT || "587"),
-        secure: process.env.EMAIL_SECURE === "true",
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
-
-    // Valida as credenciais já na inicialização, para não descobrir
-    // o problema só quando alguém pede recuperação de senha
-    try {
-        await transporter.verify();
-        console.log(`Serviço de e-mail pronto (${process.env.EMAIL_USER}).`);
-        return true;
-    } catch (error) {
-        console.error(
-            "FALHA AO AUTENTICAR NO SERVIDOR DE E-MAIL. Confira EMAIL_USER/EMAIL_PASSWORD no .env:",
-            error.message
+    if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) {
+        console.warn(
+            "Serviço de e-mail não configurado. Configure RESEND_API_KEY e EMAIL_FROM no .env"
         );
+
         return false;
     }
+
+    // Nunca loga a chave: apenas o provedor utilizado.
+    console.log("Serviço de e-mail pronto (provedor: Resend).");
+
+    return true;
 }
 
 async function enviarEmailRecuperacao(email, nome, token) {
-    if (!transporter) {
+    const apiKey = process.env.RESEND_API_KEY;
+    const remetente = process.env.EMAIL_FROM;
+
+    if (!apiKey || !remetente) {
         throw new Error(
-            "Serviço de e-mail não configurado. Configure EMAIL_HOST e EMAIL_USER no .env"
+            "Serviço de e-mail não configurado. Configure RESEND_API_KEY e EMAIL_FROM no .env"
         );
     }
 
@@ -48,8 +35,8 @@ async function enviarEmailRecuperacao(email, nome, token) {
     const linkSeguro = escaparHtml(linkRecuperacao);
 
     const mailOptions = {
-        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-        to: email,
+        from: remetente,
+        to: [email],
         subject: "Redefinição de senha - Agenda Tech",
         html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -83,11 +70,21 @@ async function enviarEmailRecuperacao(email, nome, token) {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await axios.post(RESEND_API_URL, mailOptions, {
+            timeout: 10000,
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+            },
+        });
+
         console.log(`E-mail de recuperação enviado para ${email}`);
         return true;
     } catch (error) {
-        console.error("Erro ao enviar e-mail de recuperação:", error);
+        console.error(
+            "Erro ao enviar e-mail de recuperação:",
+            error.response?.data || error.message
+        );
         throw new Error(
             "Não foi possível enviar o e-mail de recuperação."
         );
