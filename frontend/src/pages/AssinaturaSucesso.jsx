@@ -7,11 +7,13 @@ import {
     RefreshCw,
 } from "lucide-react";
 import api from "../services/api";
+import { useAuth } from "../context/useAuth";
 
 const INTERVALO = 5000;
 const MAX_TENTATIVAS = 24;
 
 export default function AssinaturaSucesso() {
+    const { recarregarAssinatura } = useAuth();
     const [situacao, setSituacao] = useState("verificando");
     const [verificandoAgora, setVerificandoAgora] = useState(false);
 
@@ -44,6 +46,7 @@ export default function AssinaturaSucesso() {
                 if (data?.assinatura?.status === "ATIVA") {
                     encerrado.current = true;
                     setSituacao("ativo");
+                    void recarregarAssinatura();
 
                     return;
                 }
@@ -81,7 +84,7 @@ export default function AssinaturaSucesso() {
                 clearTimeout(timer);
             }
         };
-    }, []);
+    }, [recarregarAssinatura]);
 
     async function verificarAgora() {
         try {
@@ -94,6 +97,7 @@ export default function AssinaturaSucesso() {
             if (data?.assinatura?.status === "ATIVA") {
                 encerrado.current = true;
                 setSituacao("ativo");
+                void recarregarAssinatura();
             } else {
                 setSituacao("aguardando");
             }

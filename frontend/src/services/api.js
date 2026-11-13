@@ -21,7 +21,8 @@ function redirecionarParaAssinatura(responseData) {
   window.location.assign("/assinatura");
 }
 
-async function request(method, path, data, signal) {
+async function request(method, path, data, options = {}) {
+  const { signal, ignorarBloqueio = false } = options || {};
   const token = localStorage.getItem("token");
 
   try {
@@ -44,7 +45,7 @@ async function request(method, path, data, signal) {
     }
 
     if (!response.ok) {
-      if (response.status === 403) {
+      if (response.status === 403 && !ignorarBloqueio) {
         redirecionarParaAssinatura(responseData);
       }
 
@@ -76,12 +77,12 @@ async function request(method, path, data, signal) {
 }
 
 const api = {
-  get: (path, options = {}) => request("GET", path, undefined, options.signal),
+  get: (path, options = {}) => request("GET", path, undefined, options),
   post: (path, data, options = {}) =>
-    request("POST", path, data, options.signal),
-  put: (path, data, options = {}) => request("PUT", path, data, options.signal),
+    request("POST", path, data, options),
+  put: (path, data, options = {}) => request("PUT", path, data, options),
   delete: (path, data, options = {}) =>
-    request("DELETE", path, data, options.signal),
+    request("DELETE", path, data, options),
 };
 
 export default api;

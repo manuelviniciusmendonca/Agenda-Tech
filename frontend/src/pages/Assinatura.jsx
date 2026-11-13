@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     AlertTriangle,
     Check,
@@ -44,7 +44,16 @@ const ESTADO_PROFISSIONAL = {
 };
 
 export default function Assinatura() {
-    const { usuario, empresa } = useAuth();
+    const {
+        usuario,
+        empresa,
+        assinaturaStatus,
+        bloqueado,
+        carregandoAssinatura,
+        recarregarAssinatura,
+        logout,
+    } = useAuth();
+    const navigate = useNavigate();
 
     const ehProfissional = usuario?.role === "PROFISSIONAL";
 
@@ -137,6 +146,7 @@ export default function Assinatura() {
             }
 
             if (statusDaAssinatura(atualizada) === "ATIVA") {
+                void recarregarAssinatura();
                 setAviso(
                     "Tudo certo! Sua assinatura está ativa e o acesso foi liberado."
                 );
@@ -211,6 +221,7 @@ export default function Assinatura() {
                     statusDaAssinatura(data?.assinatura) ===
                     "ATIVA"
                 ) {
+                    void recarregarAssinatura();
                     setVerificandoAuto(false);
                     setAviso(
                         "Pagamento confirmado! Sua assinatura está ativa e o acesso foi liberado."
@@ -253,7 +264,42 @@ export default function Assinatura() {
         assinatura?.id,
         status,
         pagamentoIniciado,
+        recarregarAssinatura,
     ]);
+
+    // Profissional com a empresa em dia não deve ficar preso
+    // nesta tela: a assinatura é gerenciada pelo administrador.
+    useEffect(() => {
+        if (
+            ehProfissional &&
+            assinaturaStatus &&
+            !carregandoAssinatura &&
+            !bloqueado
+        ) {
+            navigate("/inicio", { replace: true });
+        }
+    }, [
+        ehProfissional,
+        assinaturaStatus,
+        carregandoAssinatura,
+        bloqueado,
+        navigate,
+    ]);
+
+    async function verificarAcesso() {
+        setAtualizandoStatus(true);
+
+        try {
+            await recarregarAssinatura();
+        } finally {
+            setAtualizandoStatus(false);
+        }
+    }
+
+    function sair() {
+        logout();
+        navigate("/login", { replace: true });
+    }
 
     return (
         <div className="page-content assinatura-page">
@@ -397,13 +443,25 @@ export default function Assinatura() {
 
                                 <div className="assinatura-acoes">
                                     {ehProfissional ? (
-                                        <Link
-                                            to="/inicio"
+                                        <button
+                                            type="button"
                                             className="assinatura-cta"
+                                            onClick={verificarAcesso}
+                                            disabled={atualizandoStatus}
                                         >
-                                            <RefreshCw size={17} />
-                                            Verificar novamente
-                                        </Link>
+                                            {atualizandoStatus ? (
+                                                <Loader2
+                                                    size={18}
+                                                    className="assinatura-girando"
+                                                />
+                                            ) : (
+                                                <RefreshCw size={17} />
+                                            )}
+
+                                            {atualizandoStatus
+                                                ? "Verificando..."
+                                                : "Verificar novamente"}
+                                        </button>
                                     ) : status === "ATIVA" ? (
                                         <Link
                                             to="/dashboard"
@@ -508,6 +566,14 @@ export default function Assinatura() {
                                     O pagamento é processado com segurança pelo
                                     Asaas.
                                 </p>
+
+                                <button
+                                    type="button"
+                                    className="assinatura-link-acao assinatura-sair"
+                                    onClick={sair}
+                                >
+                                    Sair da conta
+                                </button>
                             </>
                         )}
                     </section>

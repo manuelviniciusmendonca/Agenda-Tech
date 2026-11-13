@@ -5,6 +5,7 @@ const router = express.Router();
 const {
     criarCheckout,
     buscarMinhaAssinatura,
+    buscarStatusAssinatura,
     sincronizarMinhaAssinatura,
 } = require("../controllers/assinaturaController");
 
@@ -13,6 +14,13 @@ const authMiddleware =
 
 const permitirRoles =
     require("../middlewares/roleMiddleware");
+
+// STATUS DA ASSINATURA (QUALQUER USUÁRIO LOGADO)
+router.get(
+    "/status",
+    authMiddleware,
+    buscarStatusAssinatura
+);
 
 // BUSCAR MINHA ASSINATURA
 router.get(

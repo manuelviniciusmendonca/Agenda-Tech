@@ -44,6 +44,7 @@ import Cookies from "./pages/Cookies";
 import Cancelamento from "./pages/Cancelamento";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+import SubscriptionGate from "./routes/SubscriptionGate";
 
 function App() {
     return (
@@ -145,16 +146,26 @@ function App() {
 
                 <Route element={<ProtectedRoute />}>
 
+                    {/* =================================================
+                        ASSINATURA (FORA DO PAINEL)
+                    ================================================== */}
+
+                    <Route
+                        path="/assinatura"
+                        element={
+                            <div className="assinatura-standalone">
+                                <Assinatura />
+                            </div>
+                        }
+                    />
+
+                    {/* =================================================
+                        GATE DE ASSINATURA
+                    ================================================== */}
+
+                    <Route element={<SubscriptionGate />}>
+
                     <Route element={<DashboardLayout />}>
-
-                        {/* =================================================
-                            ASSINATURA (DENTRO DO PAINEL)
-                        ================================================== */}
-
-                        <Route
-                            path="/assinatura"
-                            element={<Assinatura />}
-                        />
 
                         {/* =================================================
                             ROTAS ADMIN
@@ -286,6 +297,9 @@ function App() {
                             element={<OnboardingEmpresa />}
                         />
                     </Route>
+
+                    </Route>
+                    {/* fim do gate de assinatura */}
 
                 </Route>
 

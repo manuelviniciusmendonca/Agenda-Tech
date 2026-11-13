@@ -119,6 +119,91 @@ async function buscarMinhaAssinatura(req, res) {
 }
 
 // =====================================================
+// STATUS DA ASSINATURA (QUALQUER USUÁRIO LOGADO)
+// =====================================================
+
+// Usado pelo frontend para bloquear a navegação antes de
+// abrir o painel. Não altera o banco: apenas reflete a
+// mesma regra do middleware verificarAssinatura.
+async function buscarStatusAssinatura(req, res) {
+    try {
+        const empresaId = req.usuario?.empresa_id;
+
+        if (!empresaId) {
+            return res.status(401).json({
+                mensagem: "Empresa não identificada.",
+            });
+        }
+
+        const [rows] = await db.query(
+            `
+            SELECT
+                status,
+                periodo_fim,
+                (
+                    periodo_fim IS NOT NULL
+                    AND periodo_fim < CURDATE()
+                ) AS vencida
+            FROM assinaturas
+            WHERE empresa_id = ?
+            LIMIT 1
+            `,
+            [empresaId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(200).json({
+                status: null,
+                bloqueado: true,
+                motivo: "ASSINATURA_NAO_ENCONTRADA",
+                periodo_fim: null,
+            });
+        }
+
+        const assinatura = rows[0];
+        const statusOriginal = String(assinatura.status || "").toUpperCase();
+        const vencida = Boolean(assinatura.vencida);
+
+        let status = statusOriginal;
+        let bloqueado = true;
+        let motivo = "ASSINATURA_BLOQUEADA";
+
+        if (statusOriginal === "TRIAL") {
+            if (!assinatura.periodo_fim) {
+                motivo = "TRIAL_SEM_VENCIMENTO";
+            } else if (vencida) {
+                status = "EXPIRADA";
+                motivo = "TRIAL_EXPIRADO";
+            } else {
+                bloqueado = false;
+                motivo = null;
+            }
+        } else if (statusOriginal === "ATIVA") {
+            if (vencida) {
+                status = "EXPIRADA";
+                motivo = "ASSINATURA_VENCIDA";
+            } else {
+                bloqueado = false;
+                motivo = null;
+            }
+        }
+
+        return res.status(200).json({
+            status,
+            bloqueado,
+            motivo,
+            periodo_fim: assinatura.periodo_fim,
+        });
+    } catch (error) {
+        console.error("ERRO AO BUSCAR STATUS DA ASSINATURA:", error);
+
+        return res.status(500).json({
+            mensagem: "Não foi possível consultar o status da assinatura.",
+        });
+    }
+}
+
+// =====================================================
 // SINCRONIZAR ASSINATURA COM O ASAAS
 // =====================================================
 
@@ -495,5 +580,6 @@ async function criarCheckout(req, res) {
 module.exports = {
     criarCheckout,
     buscarMinhaAssinatura,
+    buscarStatusAssinatura,
     sincronizarMinhaAssinatura,
 };
